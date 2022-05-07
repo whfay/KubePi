@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('拉取 git 仓库代码') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '$tag']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/whfay/KubePi.git']]])
+                checkout([$class: 'GitSCM', branches: [[name: '$branch']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/whfay/KubePi.git']]])
             }
         }
         stage('Docker build') {
