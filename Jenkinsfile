@@ -1,4 +1,3 @@
-
 pipeline {
     agent {
         node {
@@ -6,8 +5,8 @@ pipeline {
         }
     }
     environment { 
-        IMAGE_NAME = 'metersphere'
-        IMAGE_PREFIX = 'registry.kubeoperator.io:8083/kubeoperator'
+        IMAGE_NAME = 'kubeoperator/kubepi-server'
+        IMAGE_PREFIX = 'registry.kubeoperator.io:8083'
     }
     stages {
         stage('拉取 git 仓库代码') {
@@ -17,12 +16,14 @@ pipeline {
         }
         stage('Docker build') {
             steps {
-                echo 'build success'
+                sh '''make build_docker
+                docker tag kubeoperator/kubepi-server:master $IMAGE_PREFIX/$IMAGE_NAME:$tag'''
             }
         }
         stage('Docker push') {
             steps {
-                echo 'push success'
+                sh '''docker login $IMAGE_PREFIX -u admin -p admin123
+                docker push $IMAGE_PREFIX/$IMAGE_NAME:$tag'''
             }
         }
     }
